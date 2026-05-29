@@ -22,6 +22,26 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-xl);padding:40px 36px;width:100%;max-width:360px;box-shadow:var(--shadow-md);text-align:center}
+.login-logo{width:48px;height:48px;background:var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.login-title{font-size:20px;font-weight:600;margin-bottom:6px}
+.login-sub{font-size:13px;color:var(--text3);margin-bottom:28px;font-family:'JetBrains Mono',monospace}
+.login-field{position:relative;margin-bottom:14px}
+.login-field input{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius);padding:12px 44px 12px 14px;color:var(--text);font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:border-color .15s;letter-spacing:.05em}
+.login-field input:focus{border-color:var(--blue-mid);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.login-field input.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.1)}
+.eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:2px;line-height:1}
+.eye-btn:hover{color:var(--text2)}
+.login-err{font-size:12px;color:var(--red);margin-bottom:12px;min-height:18px;font-family:'JetBrains Mono',monospace}
+.login-btn{width:100%;background:var(--blue);color:#fff;font-size:14px;font-weight:500;font-family:'Inter',sans-serif;padding:12px;border-radius:var(--radius);border:none;cursor:pointer;transition:background .15s}
+.login-btn:hover{background:var(--blue2)}
+.login-btn:active{transform:scale(.98)}
+
+/* APP */
+#app{display:none}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:var(--bg2);border-bottom:1px solid var(--border);box-shadow:var(--shadow);flex-wrap:wrap;gap:10px}
 .logo{display:flex;align-items:center;gap:10px}
 .logo-mark{width:32px;height:32px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center}
@@ -38,6 +58,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .sync-off{color:var(--text3);background:var(--bg3);border-color:var(--border)}
 .btn-google{display:flex;align-items:center;gap:7px;background:var(--blue);color:#fff;font-size:12px;font-weight:500;font-family:'Inter',sans-serif;padding:8px 14px;border-radius:var(--radius);border:none;cursor:pointer;transition:background .15s}
 .btn-google:hover{background:var(--blue2)}
+.btn-lock{display:flex;align-items:center;gap:6px;background:none;border:1px solid var(--border2);color:var(--text3);font-size:12px;font-family:'Inter',sans-serif;padding:7px 12px;border-radius:var(--radius);cursor:pointer;transition:all .15s}
+.btn-lock:hover{border-color:var(--red);color:var(--red)}
 .container{max-width:1100px;margin:0 auto;padding:24px 32px}
 .summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
 .scard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;box-shadow:var(--shadow)}
@@ -122,98 +144,118 @@ select option{background:var(--bg2)}
 </head>
 <body>
 
-<div id="loading-overlay" class="loading-overlay">
-  <div class="spinner"></div>
-  <div class="loading-text" id="loading-text">Conectando ao Google...</div>
-</div>
-
-<div class="topbar">
-  <div class="logo">
-    <div class="logo-mark">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="white"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="white" opacity=".6"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="white" opacity=".6"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="white" opacity=".3"/></svg>
+<!-- TELA DE LOGIN -->
+<div id="login-screen" class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">
+      <svg width="22" height="22" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="white"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="white" opacity=".6"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="white" opacity=".6"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="white" opacity=".3"/></svg>
     </div>
-    <div>
-      <div class="logo-name">Duos Marketing</div>
-      <div class="logo-sub">financeiro</div>
+    <div class="login-title">Duos Marketing</div>
+    <div class="login-sub">financeiro · acesso restrito</div>
+    <div class="login-field">
+      <input type="password" id="login-input" placeholder="Senha de acesso" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="eye-btn" onclick="toggleEye()" id="eye-btn" title="Mostrar senha">👁</button>
     </div>
-  </div>
-  <div class="topbar-right">
-    <div class="sync-status sync-off" id="sync-status">
-      <span id="sync-dot">●</span>
-      <span id="sync-text">desconectado</span>
-    </div>
-    <button class="month-btn" onclick="changeMonth(-1)">&#8249;</button>
-    <div class="month-display" id="month-display"></div>
-    <button class="month-btn" onclick="changeMonth(1)">&#8250;</button>
-    <button class="btn-google" onclick="signIn()" id="btn-signin" style="display:none">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#fff"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#fff" opacity=".8"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#fff" opacity=".6"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#fff" opacity=".4"/></svg>
-      Entrar com Google
-    </button>
-    <button class="btn-google" onclick="signOut()" id="btn-signout" style="display:none;background:var(--text3)">Sair</button>
+    <div class="login-err" id="login-err"></div>
+    <button class="login-btn" onclick="doLogin()">Entrar</button>
   </div>
 </div>
 
-<div class="container">
-  <div class="summary-grid" id="summary-grid"></div>
+<!-- APP PRINCIPAL -->
+<div id="app">
+  <div id="loading-overlay" class="loading-overlay" style="display:none">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loading-text">Conectando ao Google...</div>
+  </div>
 
-  <div class="dsec">Receitas</div>
-  <div class="panel">
-    <div class="ph">
-      <span class="pt">Clientes</span>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-        <span id="badge-pg" class="pbadge bg"></span>
-        <span id="badge-pd" class="pbadge ba"></span>
-        <button class="badd" onclick="openModal('cliente')">
-          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          Novo cliente
-        </button>
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="white"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="white" opacity=".6"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="white" opacity=".6"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="white" opacity=".3"/></svg>
+      </div>
+      <div>
+        <div class="logo-name">Duos Marketing</div>
+        <div class="logo-sub">financeiro</div>
       </div>
     </div>
-    <div style="overflow-x:auto">
-      <table><thead><tr><th>Cliente</th><th>Tipo</th><th>Valor</th><th>Vencimento</th><th>Status</th><th></th></tr></thead>
-      <tbody id="tbody-clientes"></tbody></table>
+    <div class="topbar-right">
+      <div class="sync-status sync-off" id="sync-status">
+        <span id="sync-text">desconectado</span>
+      </div>
+      <button class="month-btn" onclick="changeMonth(-1)">&#8249;</button>
+      <div class="month-display" id="month-display"></div>
+      <button class="month-btn" onclick="changeMonth(1)">&#8250;</button>
+      <button class="btn-google" onclick="signIn()" id="btn-signin" style="display:none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#fff"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#fff" opacity=".8"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#fff" opacity=".6"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#fff" opacity=".4"/></svg>
+        Sincronizar Google
+      </button>
+      <button class="btn-google" onclick="signOut()" id="btn-signout" style="display:none;background:var(--text3)">Desconectar</button>
+      <button class="btn-lock" onclick="doLogout()">🔒 Sair</button>
     </div>
   </div>
 
-  <div class="dsec">Gastos</div>
-  <div class="two-col">
-    <div class="panel">
-      <div class="ph">
-        <span class="pt">Equipe</span>
-        <div style="display:flex;gap:8px;align-items:center">
-          <span id="badge-equipe" class="pbadge br"></span>
-          <button class="badd" onclick="openModal('equipe')">
-            <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            Adicionar
-          </button>
-        </div>
-      </div>
-      <div id="list-equipe"></div>
-    </div>
-    <div class="panel">
-      <div class="ph">
-        <span class="pt">Ferramentas &amp; fixos</span>
-        <div style="display:flex;gap:8px;align-items:center">
-          <span id="badge-fixos" class="pbadge br"></span>
-          <button class="badd" onclick="openModal('fixo')">
-            <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            Adicionar
-          </button>
-        </div>
-      </div>
-      <div id="list-fixos"></div>
-    </div>
-  </div>
+  <div class="container">
+    <div class="summary-grid" id="summary-grid"></div>
 
-  <div class="dsec">Resultado</div>
-  <div class="two-col">
+    <div class="dsec">Receitas</div>
     <div class="panel">
-      <div class="ph"><span class="pt">Divisão de lucro</span><span class="pbadge bp">50 / 50</span></div>
-      <div class="lucro-block" id="lucro-block"></div>
+      <div class="ph">
+        <span class="pt">Clientes</span>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span id="badge-pg" class="pbadge bg"></span>
+          <span id="badge-pd" class="pbadge ba"></span>
+          <button class="badd" onclick="openModal('cliente')">
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Novo cliente
+          </button>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table><thead><tr><th>Cliente</th><th>Tipo</th><th>Valor</th><th>Vencimento</th><th>Status</th><th></th></tr></thead>
+        <tbody id="tbody-clientes"></tbody></table>
+      </div>
     </div>
-    <div class="panel">
-      <div class="ph"><span class="pt">Resumo do mês</span><span class="pbadge bb" id="badge-resumo"></span></div>
-      <div id="resumo-list"></div>
+
+    <div class="dsec">Gastos</div>
+    <div class="two-col">
+      <div class="panel">
+        <div class="ph">
+          <span class="pt">Equipe</span>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span id="badge-equipe" class="pbadge br"></span>
+            <button class="badd" onclick="openModal('equipe')">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Adicionar
+            </button>
+          </div>
+        </div>
+        <div id="list-equipe"></div>
+      </div>
+      <div class="panel">
+        <div class="ph">
+          <span class="pt">Ferramentas &amp; fixos</span>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span id="badge-fixos" class="pbadge br"></span>
+            <button class="badd" onclick="openModal('fixo')">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Adicionar
+            </button>
+          </div>
+        </div>
+        <div id="list-fixos"></div>
+      </div>
+    </div>
+
+    <div class="dsec">Resultado</div>
+    <div class="two-col">
+      <div class="panel">
+        <div class="ph"><span class="pt">Divisão de lucro</span><span class="pbadge bp">50 / 50</span></div>
+        <div class="lucro-block" id="lucro-block"></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><span class="pt">Resumo do mês</span><span class="pbadge bb" id="badge-resumo"></span></div>
+        <div id="resumo-list"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -230,18 +272,19 @@ select option{background:var(--bg2)}
 </div>
 
 <script>
+const PASSWORD_HASH = '7c560b4e2d7b3f5e9d8a1c6e4f2b0a3d9e7c5b1f8a4d2e6c0b9f3a7d5e1c8b4';
 const CLIENT_ID = '448542738185-sp0j7pq1jm7kh9p92bs8nq7pcv618dnk.apps.googleusercontent.com';
 const SHEET_ID  = '1jysiJmIZBmeh_8eefCYmOAywJy9rQMTb8h2uuufgNRY';
 const SCOPES    = 'https://www.googleapis.com/auth/spreadsheets';
 const MONTHS    = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const today     = new Date();
+const SESSION_KEY = 'duos-session';
 
 let currentMonth = today.getMonth();
 let currentYear  = today.getFullYear();
-let modalType = null, editId = null, nextId = 1;
+let modalType = null, editId = null, nextId = 300;
 let tokenClient, accessToken = null, isSignedIn = false;
 let saveTimer = null;
-
 let clientes = [], equipe = [], fixos = [];
 
 const DEFAULT_CLIENTES = [
@@ -273,132 +316,165 @@ const DEFAULT_FIXOS = [
   {id:205, name:'Energia',    value:200, dia:null},
 ];
 
-function setSyncStatus(state, text){
-  const el = document.getElementById('sync-status');
-  el.className = 'sync-status sync-' + state;
-  document.getElementById('sync-text').textContent = text;
+async function hashPassword(pwd){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pwd));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
-function setLoading(show, text='Carregando...'){
-  const ov = document.getElementById('loading-overlay');
-  ov.style.display = show ? 'flex' : 'none';
-  if(text) document.getElementById('loading-text').textContent = text;
+async function doLogin(){
+  const input = document.getElementById('login-input');
+  const err   = document.getElementById('login-err');
+  const pwd   = input.value;
+  if(!pwd){ err.textContent='Digite a senha.'; input.classList.add('err'); return; }
+  const hash = await hashPassword(pwd);
+  const correct = await hashPassword('@Duos2026');
+  if(hash === correct){
+    sessionStorage.setItem(SESSION_KEY,'1');
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    initApp();
+  } else {
+    err.textContent='Senha incorreta.';
+    input.classList.add('err');
+    input.value='';
+    setTimeout(()=>{ err.textContent=''; input.classList.remove('err'); },3000);
+  }
 }
 
-window.onGoogleLibraryLoad = function(){
+function doLogout(){
+  sessionStorage.removeItem(SESSION_KEY);
+  if(isSignedIn) signOut();
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('login-input').value='';
+}
+
+function toggleEye(){
+  const inp = document.getElementById('login-input');
+  inp.type = inp.type==='password'?'text':'password';
+}
+
+function checkSession(){
+  if(sessionStorage.getItem(SESSION_KEY)==='1'){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    initApp();
+  }
+}
+
+function initApp(){
+  loadLocal();
+  loadGoogleScript();
+}
+
+function loadGoogleScript(){
+  if(window.google && window.google.accounts){ initGoogleAuth(); return; }
+  const s = document.createElement('script');
+  s.src = 'https://accounts.google.com/gsi/client';
+  s.async = true; s.defer = true;
+  s.onload = initGoogleAuth;
+  document.head.appendChild(s);
+}
+
+function initGoogleAuth(){
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: CLIENT_ID,
     scope: SCOPES,
     callback: async (resp) => {
-      if(resp.error){ setSyncStatus('err','erro ao conectar'); setLoading(false); return; }
+      if(resp.error){ setSyncStatus('err','erro ao conectar'); return; }
       accessToken = resp.access_token;
       isSignedIn  = true;
       document.getElementById('btn-signin').style.display   = 'none';
       document.getElementById('btn-signout').style.display  = 'flex';
-      setSyncStatus('saving','conectando...');
+      setSyncStatus('saving','carregando...');
       await initSheet();
       await loadFromSheet();
-      setLoading(false);
       setSyncStatus('ok','sincronizado');
     }
   });
-  setLoading(false);
   document.getElementById('btn-signin').style.display = 'flex';
   setSyncStatus('off','desconectado');
-  loadLocal();
-};
-
-function signIn(){
-  setLoading(true,'Autenticando...');
-  tokenClient.requestAccessToken({prompt:'consent'});
 }
 
+function setSyncStatus(state, text){
+  const el = document.getElementById('sync-status');
+  el.className = 'sync-status sync-'+state;
+  document.getElementById('sync-text').textContent = text;
+}
+
+function signIn(){ tokenClient.requestAccessToken({prompt:''}); }
 function signOut(){
-  google.accounts.oauth2.revoke(accessToken, ()=>{});
-  accessToken = null; isSignedIn = false;
+  if(accessToken) google.accounts.oauth2.revoke(accessToken,()=>{});
+  accessToken=null; isSignedIn=false;
   document.getElementById('btn-signin').style.display  = 'flex';
   document.getElementById('btn-signout').style.display = 'none';
   setSyncStatus('off','desconectado');
 }
 
-async function sheetsRequest(method, range, body=null){
-  const base = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}`;
-  let url, opts = { method, headers:{ Authorization:'Bearer '+accessToken, 'Content-Type':'application/json' } };
-  if(method==='GET'){
-    url = `${base}/values/${encodeURIComponent(range)}`;
-  } else if(method==='PUT'){
-    url = `${base}/values/${encodeURIComponent(range)}?valueInputOption=RAW`;
-    opts.body = JSON.stringify(body);
-  } else if(method==='POST' && range==='batchUpdate'){
-    url = `${base}:batchUpdate`;
-    opts.body = JSON.stringify(body);
-  }
-  const r = await fetch(url, opts);
-  if(!r.ok){ const t=await r.text(); throw new Error(t); }
+async function sheetsRequest(method,range,body=null){
+  const base=`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}`;
+  let url, opts={method,headers:{Authorization:'Bearer '+accessToken,'Content-Type':'application/json'}};
+  if(method==='GET') url=`${base}/values/${encodeURIComponent(range)}`;
+  else if(method==='PUT'){ url=`${base}/values/${encodeURIComponent(range)}?valueInputOption=RAW`; opts.body=JSON.stringify(body); }
+  const r = await fetch(url,opts);
+  if(!r.ok) throw new Error(await r.text());
   return r.json();
 }
 
 async function initSheet(){
-  try{
-    const r = await sheetsRequest('GET','Dados!A1');
-    if(!r.values){ await sheetsRequest('PUT','Dados!A1',{values:[['DUOS_DASHBOARD_V1']]}); }
-  }catch(e){ console.warn('initSheet',e); }
+  try{ await sheetsRequest('GET','Dados!A1'); }catch(e){}
 }
 
 async function loadFromSheet(){
   try{
-    setSyncStatus('saving','carregando...');
-    const r = await sheetsRequest('GET','Dados!A1:A1');
-    const r2 = await sheetsRequest('GET','Dados!B1:B1');
-    if(!r2.values || !r2.values[0]){ await saveToSheet(); return; }
-    const json = JSON.parse(r2.values[0][0]);
-    clientes = json.clientes || DEFAULT_CLIENTES;
-    equipe   = json.equipe   || DEFAULT_EQUIPE;
-    fixos    = json.fixos    || DEFAULT_FIXOS;
-    nextId   = json.nextId   || 300;
+    const r = await sheetsRequest('GET','Dados!B1:B1');
+    if(!r.values||!r.values[0]){ await saveToSheet(); return; }
+    const json=JSON.parse(r.values[0][0]);
+    clientes=json.clientes||DEFAULT_CLIENTES;
+    equipe=json.equipe||DEFAULT_EQUIPE;
+    fixos=json.fixos||DEFAULT_FIXOS;
+    nextId=json.nextId||300;
     render();
-    setSyncStatus('ok','sincronizado');
-  }catch(e){ console.warn('loadFromSheet',e); setSyncStatus('err','erro ao carregar'); }
+  }catch(e){ setSyncStatus('err','erro ao carregar'); }
 }
 
 async function saveToSheet(){
   if(!isSignedIn) return;
   setSyncStatus('saving','salvando...');
   try{
-    const payload = JSON.stringify({clientes,equipe,fixos,nextId});
-    await sheetsRequest('PUT','Dados!A1:B1',{values:[['DUOS_DASHBOARD_V1', payload]]});
+    await sheetsRequest('PUT','Dados!A1:B1',{values:[['DUOS_V1',JSON.stringify({clientes,equipe,fixos,nextId})]]});
     setSyncStatus('ok','sincronizado');
-  }catch(e){ console.warn('saveToSheet',e); setSyncStatus('err','erro ao salvar'); }
+  }catch(e){ setSyncStatus('err','erro ao salvar'); }
 }
 
 function scheduleSave(){
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(()=>{ saveToSheet(); saveLocal(); }, 800);
+  saveTimer=setTimeout(()=>{ saveToSheet(); saveLocal(); },800);
 }
 
 function saveLocal(){
-  try{ localStorage.setItem('duos-fin-v2', JSON.stringify({clientes,equipe,fixos,nextId})); }catch(e){}
+  try{ localStorage.setItem('duos-fin-v2',JSON.stringify({clientes,equipe,fixos,nextId})); }catch(e){}
 }
 
 function loadLocal(){
   try{
-    const r = localStorage.getItem('duos-fin-v2');
+    const r=localStorage.getItem('duos-fin-v2');
     if(r){ const d=JSON.parse(r); clientes=d.clientes||DEFAULT_CLIENTES; equipe=d.equipe||DEFAULT_EQUIPE; fixos=d.fixos||DEFAULT_FIXOS; nextId=d.nextId||300; }
     else{ clientes=DEFAULT_CLIENTES; equipe=DEFAULT_EQUIPE; fixos=DEFAULT_FIXOS; }
   }catch(e){ clientes=DEFAULT_CLIENTES; equipe=DEFAULT_EQUIPE; fixos=DEFAULT_FIXOS; }
   render();
 }
 
-const brl = v => v!=null&&v!==''&&!isNaN(parseFloat(v)) ? 'R$ '+parseFloat(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-const monthKey = () => `${currentYear}-${String(currentMonth+1).padStart(2,'0')}`;
-const typeMap = {gestao:'Gestão',trafego:'Tráfego',full:'Full service',avulso:'Avulso'};
+const brl=v=>v!=null&&v!==''&&!isNaN(parseFloat(v))?'R$ '+parseFloat(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}):'—';
+const monthKey=()=>`${currentYear}-${String(currentMonth+1).padStart(2,'0')}`;
+const typeMap={gestao:'Gestão',trafego:'Tráfego',full:'Full service',avulso:'Avulso'};
 
 function getStatus(c){ return (c.status&&c.status[monthKey()])||'pendente'; }
 function cycleStatus(id){
   const c=clientes.find(x=>x.id===id); if(!c) return;
   if(!c.status) c.status={};
   const cur=getStatus(c);
-  c.status[monthKey()] = cur==='pendente'?'pago':cur==='pago'?'atrasado':'pendente';
+  c.status[monthKey()]=cur==='pendente'?'pago':cur==='pago'?'atrasado':'pendente';
   scheduleSave(); render();
 }
 
@@ -410,40 +486,33 @@ function vencClass(dia){
   return '';
 }
 
-const stMap={
-  pago:    {cls:'sp',icon:'✓',label:'Pago'},
-  pendente:{cls:'se',icon:'○',label:'Pendente'},
-  atrasado:{cls:'sa',icon:'!',label:'Atrasado'}
-};
+const stMap={pago:{cls:'sp',icon:'✓',label:'Pago'},pendente:{cls:'se',icon:'○',label:'Pendente'},atrasado:{cls:'sa',icon:'!',label:'Atrasado'}};
 
 function render(){
-  document.getElementById('month-display').textContent = MONTHS[currentMonth]+' '+currentYear;
-
-  const totalR  = clientes.reduce((s,c)=>s+(c.value||0),0);
-  const recebido= clientes.filter(c=>getStatus(c)==='pago').reduce((s,c)=>s+(c.value||0),0);
-  const pendente= totalR-recebido;
-  const totalEq = equipe.reduce((s,e)=>s+(e.value||0),0);
-  const totalFx = fixos.reduce((s,e)=>s+(e.value||0),0);
-  const totalG  = totalEq+totalFx;
-  const lucro   = totalR-totalG;
+  document.getElementById('month-display').textContent=MONTHS[currentMonth]+' '+currentYear;
+  const totalR=clientes.reduce((s,c)=>s+(c.value||0),0);
+  const recebido=clientes.filter(c=>getStatus(c)==='pago').reduce((s,c)=>s+(c.value||0),0);
+  const pendente=totalR-recebido;
+  const totalEq=equipe.reduce((s,e)=>s+(e.value||0),0);
+  const totalFx=fixos.reduce((s,e)=>s+(e.value||0),0);
+  const totalG=totalEq+totalFx;
+  const lucro=totalR-totalG;
   const lucroEach=lucro/2;
-  const margem  = totalR>0?((lucro/totalR)*100).toFixed(1):0;
+  const margem=totalR>0?((lucro/totalR)*100).toFixed(1):0;
 
   document.getElementById('summary-grid').innerHTML=`
     <div class="scard hi"><div class="abar"></div><div class="sc-label">Receita total</div><div class="sc-val">${brl(totalR)}</div><div class="sc-sub">${clientes.length} clientes</div></div>
     <div class="scard"><div class="abar" style="background:var(--green)"></div><div class="sc-label">Recebido</div><div class="sc-val" style="color:var(--green)">${brl(recebido)}</div><div class="sc-sub">${clientes.filter(c=>getStatus(c)==='pago').length} pagamentos</div></div>
     <div class="scard"><div class="abar" style="background:var(--amber)"></div><div class="sc-label">A receber</div><div class="sc-val" style="color:var(--amber)">${brl(pendente)}</div><div class="sc-sub">${clientes.filter(c=>getStatus(c)!=='pago').length} pendentes</div></div>
     <div class="scard"><div class="abar" style="background:var(--red)"></div><div class="sc-label">Total gastos</div><div class="sc-val" style="color:var(--red)">${brl(totalG)}</div><div class="sc-sub">equipe + fixos</div></div>
-    <div class="scard"><div class="abar" style="background:var(--purple)"></div><div class="sc-label">Lucro líquido</div><div class="sc-val" style="color:var(--purple)">${brl(lucro)}</div><div class="sc-sub">${brl(lucroEach)} p/ sócio</div></div>
-  `;
+    <div class="scard"><div class="abar" style="background:var(--purple)"></div><div class="sc-label">Lucro líquido</div><div class="sc-val" style="color:var(--purple)">${brl(lucro)}</div><div class="sc-sub">${brl(lucroEach)} p/ sócio</div></div>`;
 
   const pg=clientes.filter(c=>getStatus(c)==='pago').length;
   const pd=clientes.filter(c=>getStatus(c)!=='pago').length;
   document.getElementById('badge-pg').textContent=pg+' pago'+(pg!==1?'s':'');
   document.getElementById('badge-pd').textContent=pd+' pendente'+(pd!==1?'s':'');
 
-  const sorted=[...clientes].sort((a,b)=>(b.value||0)-(a.value||0));
-  document.getElementById('tbody-clientes').innerHTML=sorted.map(c=>{
+  document.getElementById('tbody-clientes').innerHTML=[...clientes].sort((a,b)=>(b.value||0)-(a.value||0)).map(c=>{
     const st=getStatus(c); const sc=stMap[st];
     const vc=c.venc?`<span class="vbadge ${vencClass(c.venc)}">dia ${c.venc}</span>`:`<span style="color:var(--text3);font-size:12px">—</span>`;
     return`<tr>
@@ -455,8 +524,7 @@ function render(){
       <td>
         <button class="bicon" onclick="openModal('cliente',${c.id})" title="Editar">✎</button>
         <button class="bicon del" onclick="delItem('clientes',${c.id})" title="Remover">✕</button>
-      </td>
-    </tr>`;
+      </td></tr>`;
   }).join('');
 
   document.getElementById('badge-equipe').textContent=brl(totalEq);
@@ -467,8 +535,7 @@ function render(){
         <div class="ev">${e.value?brl(e.value):`<span style="color:var(--text3);font-size:12px">a definir</span>`}</div>
         <button class="bicon" onclick="openModal('equipe',${e.id})" title="Editar">✎</button>
         <button class="bicon del" onclick="delItem('equipe',${e.id})" title="Remover">✕</button>
-      </div>
-    </div>`).join('');
+      </div></div>`).join('');
 
   document.getElementById('badge-fixos').textContent=brl(totalFx);
   document.getElementById('list-fixos').innerHTML=fixos.map(e=>`
@@ -478,8 +545,7 @@ function render(){
         <div class="ev">${e.value?brl(e.value):`<span style="color:var(--text3);font-size:12px">a definir</span>`}</div>
         <button class="bicon" onclick="openModal('fixo',${e.id})" title="Editar">✎</button>
         <button class="bicon del" onclick="delItem('fixos',${e.id})" title="Remover">✕</button>
-      </div>
-    </div>`).join('');
+      </div></div>`).join('');
 
   const pctRec=totalR>0?Math.round((recebido/totalR)*100):0;
   document.getElementById('lucro-block').innerHTML=`
@@ -572,8 +638,7 @@ function saveModal(){
 
 function delItem(list,id){
   const map={clientes,equipe,fixos};
-  const arr=map[list]; if(!arr) return;
-  const item=arr.find(x=>x.id===id);
+  const item=map[list]?.find(x=>x.id===id);
   if(!item||!confirm('Remover "'+item.name+'"?')) return;
   if(list==='clientes') clientes=clientes.filter(x=>x.id!==id);
   else if(list==='equipe') equipe=equipe.filter(x=>x.id!==id);
@@ -584,7 +649,9 @@ function delItem(list,id){
 function closeModal(){ document.getElementById('modal').classList.remove('open'); modalType=null; editId=null; }
 function handleOverlay(e){ if(e.target===document.getElementById('modal')) closeModal(); }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+document.getElementById('login-input').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+
+checkSession();
 </script>
-<script src="https://accounts.google.com/gsi/client" async defer onload="window.onGoogleLibraryLoad && window.onGoogleLibraryLoad()"></script>
 </body>
 </html>
