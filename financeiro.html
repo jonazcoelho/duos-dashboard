@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duos Marketing — Financeiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f0f4fa;--bg2:#fff;--bg3:#e8eef7;--border:#dce5f0;--border2:#c4d3e8;
+  --text:#0f1c2e;--text2:#4a6080;--text3:#8aa0bc;
+  --blue:#1a56db;--blue2:#1e429f;--blue-light:#e8f0fe;--blue-mid:#3b82f6;
+  --green:#059669;--green-light:#d1fae5;
+  --red:#dc2626;--red-light:#fee2e2;
+  --amber:#d97706;--amber-light:#fef3c7;
+  --purple:#7c3aed;--purple-light:#ede9fe;
+  --radius:10px;--radius-lg:14px;--radius-xl:18px;
+  --shadow:0 1px 3px rgba(15,28,46,.08),0 1px 2px rgba(15,28,46,.04);
+  --shadow-md:0 4px 16px rgba(15,28,46,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:var(--bg2);border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:32px;height:32px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-name{font-size:15px;font-weight:600}
+.logo-sub{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.month-btn{background:none;border:1px solid var(--border2);color:var(--text2);font-size:13px;padding:6px 10px;border-radius:var(--radius);cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.month-btn:hover{background:var(--bg3);border-color:var(--blue-mid);color:var(--blue)}
+.month-display{font-size:14px;font-weight:500;min-width:110px;text-align:center;font-family:'JetBrains Mono',monospace}
+.saved-badge{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--green);background:var(--green-light);border:1px solid rgba(5,150,105,.2);padding:4px 10px;border-radius:20px;opacity:0;transition:opacity .4s}
+.container{max-width:1100px;margin:0 auto;padding:24px 32px}
+.summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
+.scard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;box-shadow:var(--shadow)}
+.scard.hi{background:var(--blue);border-color:var(--blue2)}
+.scard.hi .sc-label{color:rgba(255,255,255,.65)}
+.scard.hi .sc-val{color:#fff}
+.scard.hi .sc-sub{color:rgba(255,255,255,.5)}
+.scard.hi .abar{background:rgba(255,255,255,.4)}
+.abar{width:20px;height:3px;border-radius:2px;background:var(--blue);margin-bottom:10px}
+.sc-label{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.sc-val{font-size:20px;font-weight:600}
+.sc-sub{font-size:11px;color:var(--text3);margin-top:4px}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--border);background:var(--bg3)}
+.pt{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;font-family:'JetBrains Mono',monospace}
+.pbadge{font-size:11px;font-family:'JetBrains Mono',monospace;padding:3px 8px;border-radius:20px;font-weight:500}
+.bg{background:var(--green-light);color:var(--green)}
+.br{background:var(--red-light);color:var(--red)}
+.bb{background:var(--blue-light);color:var(--blue)}
+.ba{background:var(--amber-light);color:var(--amber)}
+.bp{background:var(--purple-light);color:var(--purple)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+table{width:100%;border-collapse:collapse}
+th{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-family:'JetBrains Mono',monospace;padding:8px 14px;border-bottom:1px solid var(--border);text-align:left;background:var(--bg2)}
+td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg3)}
+.tn{color:var(--text);font-weight:500}
+.tm{font-family:'JetBrains Mono',monospace;font-size:12px}
+.tv{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--text)}
+.sbtn{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap}
+.sp{background:var(--green-light);color:var(--green)}
+.sp:hover{background:#a7f3d0}
+.se{background:var(--amber-light);color:var(--amber)}
+.se:hover{background:#fde68a}
+.sa{background:var(--red-light);color:var(--red)}
+.sa:hover{background:#fecaca}
+.vbadge{font-size:11px;font-family:'JetBrains Mono',monospace;padding:3px 7px;border-radius:6px;background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+.vh{background:var(--amber-light);color:var(--amber);border-color:rgba(217,119,6,.2)}
+.vat{background:var(--red-light);color:var(--red);border-color:rgba(220,38,38,.2)}
+.erow{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);transition:background .1s}
+.erow:last-child{border-bottom:none}
+.erow:hover{background:var(--bg3)}
+.en{font-size:13px;font-weight:500;color:var(--text)}
+.ed{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:2px}
+.ev{font-size:14px;font-weight:600;color:var(--red);font-family:'JetBrains Mono',monospace}
+.eactions{display:flex;gap:4px;align-items:center}
+.lucro-block{padding:18px}
+.lucro-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+.avb{background:var(--blue-light);color:var(--blue2)}
+.avp{background:var(--purple-light);color:var(--purple)}
+.pname{font-size:14px;font-weight:500}
+.ppct{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace}
+.lval{font-size:20px;font-weight:600;color:var(--green);font-family:'JetBrains Mono',monospace}
+.pbar{width:100%;background:var(--bg3);border-radius:4px;height:6px;overflow:hidden;margin-top:12px}
+.pfill{height:100%;border-radius:4px;background:var(--blue)}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,28,46,.55);z-index:100;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-xl);padding:26px;width:100%;max-width:440px;box-shadow:var(--shadow-md);margin:auto}
+.modal-title{font-size:15px;font-weight:600;margin-bottom:18px}
+.fg{margin-bottom:14px}
+.fl{font-size:11px;font-weight:500;color:var(--text3);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px;display:block}
+input,select{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius);padding:10px 12px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border-color .15s}
+input:focus,select:focus{border-color:var(--blue-mid);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+select option{background:var(--bg2)}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mactions{display:flex;gap:10px;margin-top:18px}
+.bsave{flex:1;background:var(--blue);color:#fff;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;padding:10px;border-radius:var(--radius);border:none;cursor:pointer;transition:background .15s}
+.bsave:hover{background:var(--blue2)}
+.bcancel{background:none;border:1px solid var(--border2);color:var(--text2);font-size:13px;font-family:'Inter',sans-serif;padding:10px 16px;border-radius:var(--radius);cursor:pointer;transition:all .15s}
+.bcancel:hover{background:var(--bg3)}
+.badd{display:inline-flex;align-items:center;gap:6px;background:var(--blue-light);color:var(--blue2);font-size:12px;font-weight:500;font-family:'Inter',sans-serif;padding:7px 13px;border-radius:var(--radius);border:1px solid rgba(26,86,219,.2);cursor:pointer;transition:all .15s}
+.badd:hover{background:#d1e0fc}
+.bicon{background:none;border:none;cursor:pointer;color:var(--text3);padding:4px 5px;border-radius:5px;font-size:13px;line-height:1;transition:all .12s}
+.bicon:hover{color:var(--blue);background:var(--blue-light)}
+.bicon.del:hover{color:var(--red);background:var(--red-light)}
+.dsec{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;font-family:'JetBrains Mono',monospace;margin:24px 0 12px;display:flex;align-items:center;gap:10px}
+.dsec::after{content:'';flex:1;height:1px;background:var(--border)}
+@media(max-width:900px){.summary-grid{grid-template-columns:repeat(3,1fr)}.two-col{grid-template-columns:1fr}.container{padding:16px}.topbar{padding:14px 16px;flex-wrap:wrap;gap:10px}}
+@media(max-width:560px){.summary-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-mark">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="white"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="white" opacity=".6"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="white" opacity=".6"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="white" opacity=".3"/></svg>
+    </div>
+    <div>
+      <div class="logo-name">Duos Marketing</div>
+      <div class="logo-sub">financeiro</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="saved-badge" id="saved-badge">salvo</span>
+    <button class="month-btn" onclick="changeMonth(-1)">&#8249;</button>
+    <div class="month-display" id="month-display"></div>
+    <button class="month-btn" onclick="changeMonth(1)">&#8250;</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="summary-grid" id="summary-grid"></div>
+
+  <div class="dsec">Receitas</div>
+  <div class="panel">
+    <div class="ph">
+      <span class="pt">Clientes</span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span id="badge-pg" class="pbadge bg"></span>
+        <span id="badge-pd" class="pbadge ba"></span>
+        <button class="badd" onclick="openModal('cliente')">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Novo cliente
+        </button>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Cliente</th><th>Tipo</th><th>Valor</th><th>Vencimento</th><th>Status</th><th></th></tr></thead>
+      <tbody id="tbody-clientes"></tbody></table>
+    </div>
+  </div>
+
+  <div class="dsec">Gastos</div>
+  <div class="two-col">
+    <div class="panel">
+      <div class="ph">
+        <span class="pt">Equipe</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span id="badge-equipe" class="pbadge br"></span>
+          <button class="badd" onclick="openModal('equipe')">
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+      <div id="list-equipe"></div>
+    </div>
+    <div class="panel">
+      <div class="ph">
+        <span class="pt">Ferramentas &amp; fixos</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span id="badge-fixos" class="pbadge br"></span>
+          <button class="badd" onclick="openModal('fixo')">
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Adicionar
+          </button>
+        </div>
+      </div>
+      <div id="list-fixos"></div>
+    </div>
+  </div>
+
+  <div class="dsec">Resultado</div>
+  <div class="two-col">
+    <div class="panel">
+      <div class="ph"><span class="pt">Divisão de lucro</span><span class="pbadge bp">50 / 50</span></div>
+      <div class="lucro-block" id="lucro-block"></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><span class="pt">Resumo do mês</span><span class="pbadge bb" id="badge-resumo"></span></div>
+      <div id="resumo-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal unificado -->
+<div class="modal-overlay" id="modal" onclick="handleOverlay(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title" id="modal-title">Novo item</div>
+    <div id="modal-body"></div>
+    <div class="mactions">
+      <button class="bsave" onclick="saveModal()">Salvar</button>
+      <button class="bcancel" onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORE = 'duos-fin-v2';
+const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const today = new Date();
+let currentMonth = today.getMonth();
+let currentYear = today.getFullYear();
+let modalType = null, editId = null, nextId = 200;
+
+const DEFAULT_CLIENTES = [
+  {id:1, name:'Bureau Contabilidade',   value:4300, venc:null, type:'full',    status:{}},
+  {id:2, name:'Tecendo a Provav',        value:2800, venc:null, type:'gestao',  status:{}},
+  {id:3, name:'Mercatto Forno e Brasa',  value:2500, venc:28,   type:'gestao',  status:{}},
+  {id:4, name:'Pé de Coco',              value:2350, venc:null, type:'gestao',  status:{}},
+  {id:5, name:'Vila Rodeio',             value:2000, venc:null, type:'gestao',  status:{}},
+  {id:6, name:'Frango Cowboy',           value:1800, venc:null, type:'gestao',  status:{}},
+  {id:7, name:'iShop Tecnologia',        value:1500, venc:null, type:'gestao',  status:{}},
+  {id:8, name:'Bright Burguer',          value:1500, venc:null, type:'gestao',  status:{}},
+  {id:9, name:'Lucena Jóias',            value:1400, venc:null, type:'gestao',  status:{}},
+  {id:10,name:'Tráfego Ponto Charme',    value:1200, venc:28,   type:'trafego', status:{}},
+  {id:11,name:'Confiança Mudanças',      value:1000, venc:null, type:'gestao',  status:{}},
+  {id:12,name:'Tráfego Mavelu',          value:300,  venc:null, type:'trafego', status:{}},
+  {id:13,name:'Eskenta Restobar',        value:null, venc:29,   type:'gestao',  status:{}},
+  {id:14,name:'Pé de Coco na Copa',      value:1000, venc:null, type:'avulso',  status:{}},
+];
+const DEFAULT_EQUIPE = [
+  {id:101, name:'Iago — gestor de tráfego', value:1600, dia:16},
+  {id:102, name:'Letícia — social media',   value:null, dia:5},
+  {id:103, name:'Marcus — videomaker',       value:null, dia:27},
+];
+const DEFAULT_FIXOS = [
+  {id:201, name:'Freepik',     value:80,  dia:null},
+  {id:202, name:'Design BR',   value:30,  dia:null},
+  {id:203, name:'Google One',  value:60,  dia:null},
+  {id:204, name:'Internet',    value:150, dia:null},
+  {id:205, name:'Energia',     value:200, dia:null},
+];
+
+let clientes = [], equipe = [], fixos = [];
+
+function load(){
+  try{
+    const r = localStorage.getItem(STORE);
+    if(r){ const d=JSON.parse(r); clientes=d.clientes||DEFAULT_CLIENTES; equipe=d.equipe||DEFAULT_EQUIPE; fixos=d.fixos||DEFAULT_FIXOS; nextId=d.nextId||200; }
+    else{ clientes=DEFAULT_CLIENTES; equipe=DEFAULT_EQUIPE; fixos=DEFAULT_FIXOS; }
+  }catch(e){ clientes=DEFAULT_CLIENTES; equipe=DEFAULT_EQUIPE; fixos=DEFAULT_FIXOS; }
+  render();
+}
+
+function persist(){
+  localStorage.setItem(STORE, JSON.stringify({clientes,equipe,fixos,nextId}));
+  const b=document.getElementById('saved-badge');
+  b.style.opacity='1'; setTimeout(()=>b.style.opacity='0',2000);
+}
+
+const brl = v => v!=null && v!=='' ? 'R$ '+parseFloat(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
+const monthKey = () => `${currentYear}-${String(currentMonth+1).padStart(2,'0')}`;
+const typeMap = {gestao:'Gestão',trafego:'Tráfego',full:'Full service',avulso:'Avulso'};
+
+function getStatus(c){ return (c.status && c.status[monthKey()]) || 'pendente'; }
+function cycleStatus(id){
+  const c=clientes.find(x=>x.id===id); if(!c) return;
+  if(!c.status) c.status={};
+  const cur=getStatus(c);
+  c.status[monthKey()] = cur==='pendente'?'pago':cur==='pago'?'atrasado':'pendente';
+  persist(); render();
+}
+
+function vencClass(dia){
+  if(!dia) return '';
+  const v=new Date(currentYear,currentMonth,dia);
+  if(dia===today.getDate()&&currentMonth===today.getMonth()&&currentYear===today.getFullYear()) return 'vh';
+  if(v<today&&currentMonth===today.getMonth()&&currentYear===today.getFullYear()) return 'vat';
+  return '';
+}
+
+const stMap={pago:{cls:'sp',icon:'✓',label:'Pago'},pendente:{cls:'se',icon:'○',label:'Pendente'},atrasado:{cls:'sa',icon:'!',label:'Atrasado'}};
+
+function render(){
+  document.getElementById('month-display').textContent=MONTHS[currentMonth]+' '+currentYear;
+  const mk=monthKey();
+  const totalR=clientes.reduce((s,c)=>s+(c.value||0),0);
+  const recebido=clientes.filter(c=>getStatus(c)==='pago').reduce((s,c)=>s+(c.value||0),0);
+  const pendente=totalR-recebido;
+  const totalEq=equipe.reduce((s,e)=>s+(e.value||0),0);
+  const totalFx=fixos.reduce((s,e)=>s+(e.value||0),0);
+  const totalG=totalEq+totalFx;
+  const lucro=totalR-totalG;
+  const lucroEach=lucro/2;
+  const margem=totalR>0?((lucro/totalR)*100).toFixed(1):0;
+
+  document.getElementById('summary-grid').innerHTML=`
+    <div class="scard hi"><div class="abar"></div><div class="sc-label">Receita total</div><div class="sc-val">${brl(totalR)}</div><div class="sc-sub">${clientes.length} clientes</div></div>
+    <div class="scard"><div class="abar" style="background:var(--green)"></div><div class="sc-label">Recebido</div><div class="sc-val" style="color:var(--green)">${brl(recebido)}</div><div class="sc-sub">${clientes.filter(c=>getStatus(c)==='pago').length} pagamentos</div></div>
+    <div class="scard"><div class="abar" style="background:var(--amber)"></div><div class="sc-label">A receber</div><div class="sc-val" style="color:var(--amber)">${brl(pendente)}</div><div class="sc-sub">${clientes.filter(c=>getStatus(c)!=='pago').length} pendentes</div></div>
+    <div class="scard"><div class="abar" style="background:var(--red)"></div><div class="sc-label">Total gastos</div><div class="sc-val" style="color:var(--red)">${brl(totalG)}</div><div class="sc-sub">equipe + fixos</div></div>
+    <div class="scard"><div class="abar" style="background:var(--purple)"></div><div class="sc-label">Lucro líquido</div><div class="sc-val" style="color:var(--purple)">${brl(lucro)}</div><div class="sc-sub">${brl(lucroEach)} p/ sócio</div></div>
+  `;
+
+  const pg=clientes.filter(c=>getStatus(c)==='pago').length;
+  const pd=clientes.filter(c=>getStatus(c)!=='pago').length;
+  document.getElementById('badge-pg').textContent=pg+' pago'+(pg!==1?'s':'');
+  document.getElementById('badge-pd').textContent=pd+' pendente'+(pd!==1?'s':'');
+
+  const sorted=[...clientes].sort((a,b)=>(b.value||0)-(a.value||0));
+  document.getElementById('tbody-clientes').innerHTML=sorted.map(c=>{
+    const st=getStatus(c); const sc=stMap[st];
+    const vc=c.venc?`<span class="vbadge ${vencClass(c.venc)}">dia ${c.venc}</span>`:`<span style="color:var(--text3);font-size:12px">—</span>`;
+    return`<tr>
+      <td class="tn">${c.name}</td>
+      <td><span style="font-size:12px;color:var(--text3)">${typeMap[c.type]||c.type}</span></td>
+      <td class="tv">${c.value?brl(c.value):`<span style="color:var(--text3)">a definir</span>`}</td>
+      <td>${vc}</td>
+      <td><button class="sbtn ${sc.cls}" onclick="cycleStatus(${c.id})">${sc.icon} ${sc.label}</button></td>
+      <td>
+        <button class="bicon" onclick="openModal('cliente',${c.id})" title="Editar">✎</button>
+        <button class="bicon del" onclick="delItem('clientes',${c.id})" title="Remover">✕</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('badge-equipe').textContent=brl(totalEq);
+  document.getElementById('list-equipe').innerHTML=equipe.map(e=>`
+    <div class="erow">
+      <div><div class="en">${e.name}</div><div class="ed">${e.dia?'vence dia '+e.dia:'sem data fixa'}</div></div>
+      <div class="eactions">
+        <div class="ev">${e.value?brl(e.value):`<span style="color:var(--text3);font-size:12px">a definir</span>`}</div>
+        <button class="bicon" onclick="openModal('equipe',${e.id})" title="Editar">✎</button>
+        <button class="bicon del" onclick="delItem('equipe',${e.id})" title="Remover">✕</button>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('badge-fixos').textContent=brl(totalFx);
+  document.getElementById('list-fixos').innerHTML=fixos.map(e=>`
+    <div class="erow">
+      <div><div class="en">${e.name}</div><div class="ed">fixo mensal</div></div>
+      <div class="eactions">
+        <div class="ev">${e.value?brl(e.value):`<span style="color:var(--text3);font-size:12px">a definir</span>`}</div>
+        <button class="bicon" onclick="openModal('fixo',${e.id})" title="Editar">✎</button>
+        <button class="bicon del" onclick="delItem('fixos',${e.id})" title="Remover">✕</button>
+      </div>
+    </div>`).join('');
+
+  const pctRec=totalR>0?Math.round((recebido/totalR)*100):0;
+  document.getElementById('lucro-block').innerHTML=`
+    <div class="lucro-row">
+      <div style="display:flex;align-items:center;gap:10px"><div class="avatar avb">JN</div><div><div class="pname">Você</div><div class="ppct">50% do lucro</div></div></div>
+      <div class="lval">${brl(lucroEach)}</div>
+    </div>
+    <div class="lucro-row">
+      <div style="display:flex;align-items:center;gap:10px"><div class="avatar avp">PL</div><div><div class="pname">Paulo</div><div class="ppct">50% do lucro</div></div></div>
+      <div class="lval">${brl(lucroEach)}</div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-bottom:6px">${pctRec}% da receita recebida</div>
+    <div class="pbar"><div class="pfill" style="width:${pctRec}%"></div></div>`;
+
+  document.getElementById('badge-resumo').textContent=MONTHS[currentMonth];
+  document.getElementById('resumo-list').innerHTML=`
+    <div class="erow"><div><div class="en">Receita total</div></div><div style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--blue)">${brl(totalR)}</div></div>
+    <div class="erow"><div><div class="en">Equipe</div></div><div style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--red)">- ${brl(totalEq)}</div></div>
+    <div class="erow"><div><div class="en">Ferramentas &amp; fixos</div></div><div style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--red)">- ${brl(totalFx)}</div></div>
+    <div class="erow" style="background:var(--bg3)"><div><div class="en" style="font-weight:600">Lucro líquido</div></div><div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px;color:${lucro>=0?'var(--green)':'var(--red)'}">${brl(lucro)}</div></div>
+    <div class="erow"><div><div class="en">Margem</div></div><div style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--text2)">${margem}%</div></div>`;
+}
+
+function changeMonth(dir){
+  currentMonth+=dir;
+  if(currentMonth>11){currentMonth=0;currentYear++;}
+  if(currentMonth<0){currentMonth=11;currentYear--;}
+  render();
+}
+
+function openModal(type, id=null){
+  modalType=type; editId=id;
+  const modal=document.getElementById('modal');
+  const title=document.getElementById('modal-title');
+  const body=document.getElementById('modal-body');
+
+  if(type==='cliente'){
+    const c=id?clientes.find(x=>x.id===id):null;
+    title.textContent=c?'Editar cliente':'Novo cliente';
+    body.innerHTML=`
+      <div class="fg"><label class="fl">Nome do cliente</label><input type="text" id="f-name" placeholder="Ex: Studio XYZ" value="${c?c.name:''}"></div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Valor mensal (R$)</label><input type="number" id="f-value" placeholder="2000" min="0" value="${c&&c.value?c.value:''}"></div>
+        <div class="fg"><label class="fl">Dia de vencimento</label><input type="number" id="f-venc" placeholder="10" min="1" max="31" value="${c&&c.venc?c.venc:''}"></div>
+      </div>
+      <div class="fg"><label class="fl">Tipo de serviço</label>
+        <select id="f-type">
+          <option value="gestao" ${c&&c.type==='gestao'?'selected':''}>Gestão</option>
+          <option value="trafego" ${c&&c.type==='trafego'?'selected':''}>Tráfego</option>
+          <option value="full" ${c&&c.type==='full'?'selected':''}>Full service</option>
+          <option value="avulso" ${c&&c.type==='avulso'?'selected':''}>Avulso</option>
+        </select>
+      </div>`;
+  } else if(type==='equipe'){
+    const e=id?equipe.find(x=>x.id===id):null;
+    title.textContent=e?'Editar membro da equipe':'Novo membro';
+    body.innerHTML=`
+      <div class="fg"><label class="fl">Nome e função</label><input type="text" id="f-name" placeholder="Ex: João — designer" value="${e?e.name:''}"></div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Valor mensal (R$)</label><input type="number" id="f-value" placeholder="1500" min="0" value="${e&&e.value?e.value:''}"></div>
+        <div class="fg"><label class="fl">Dia de pagamento</label><input type="number" id="f-dia" placeholder="10" min="1" max="31" value="${e&&e.dia?e.dia:''}"></div>
+      </div>`;
+  } else if(type==='fixo'){
+    const e=id?fixos.find(x=>x.id===id):null;
+    title.textContent=e?'Editar gasto fixo':'Novo gasto fixo';
+    body.innerHTML=`
+      <div class="fg"><label class="fl">Descrição</label><input type="text" id="f-name" placeholder="Ex: Adobe Creative" value="${e?e.name:''}"></div>
+      <div class="fg"><label class="fl">Valor mensal (R$)</label><input type="number" id="f-value" placeholder="100" min="0" value="${e&&e.value?e.value:''}"></div>`;
+  }
+
+  modal.classList.add('open');
+  setTimeout(()=>{ const el=document.getElementById('f-name'); if(el) el.focus(); },50);
+}
+
+function saveModal(){
+  const name=(document.getElementById('f-name')?.value||'').trim();
+  const value=parseFloat(document.getElementById('f-value')?.value)||null;
+  if(!name){ alert('Informe o nome/descrição.'); return; }
+
+  if(modalType==='cliente'){
+    const venc=parseInt(document.getElementById('f-venc')?.value)||null;
+    const type=document.getElementById('f-type')?.value||'gestao';
+    if(editId){ const i=clientes.findIndex(x=>x.id===editId); if(i>-1) clientes[i]={...clientes[i],name,value,venc,type}; }
+    else clientes.push({id:nextId++,name,value,venc,type,status:{}});
+  } else if(modalType==='equipe'){
+    const dia=parseInt(document.getElementById('f-dia')?.value)||null;
+    if(editId){ const i=equipe.findIndex(x=>x.id===editId); if(i>-1) equipe[i]={...equipe[i],name,value,dia}; }
+    else equipe.push({id:nextId++,name,value,dia});
+  } else if(modalType==='fixo'){
+    if(editId){ const i=fixos.findIndex(x=>x.id===editId); if(i>-1) fixos[i]={...fixos[i],name,value}; }
+    else fixos.push({id:nextId++,name,value});
+  }
+
+  persist(); closeModal(); render();
+}
+
+function delItem(list, id){
+  const map={clientes,equipe,fixos};
+  const arr=map[list]; if(!arr) return;
+  const item=arr.find(x=>x.id===id);
+  if(!item||!confirm('Remover "'+item.name+'"?')) return;
+  if(list==='clientes') clientes=clientes.filter(x=>x.id!==id);
+  else if(list==='equipe') equipe=equipe.filter(x=>x.id!==id);
+  else fixos=fixos.filter(x=>x.id!==id);
+  persist(); render();
+}
+
+function closeModal(){ document.getElementById('modal').classList.remove('open'); modalType=null; editId=null; }
+function handleOverlay(e){ if(e.target===document.getElementById('modal')) closeModal(); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+load();
+</script>
+</body>
+</html>
