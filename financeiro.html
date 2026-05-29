@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
+:root{
   --bg:#f0f4fa;--bg2:#fff;--bg3:#e8eef7;--border:#dce5f0;--border2:#c4d3e8;
   --text:#0f1c2e;--text2:#4a6080;--text3:#8aa0bc;
   --blue:#1a56db;--blue2:#1e429f;--blue-light:#e8f0fe;--blue-mid:#3b82f6;
@@ -22,30 +22,35 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:var(--bg2);border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:var(--bg2);border-bottom:1px solid var(--border);box-shadow:var(--shadow);flex-wrap:wrap;gap:10px}
 .logo{display:flex;align-items:center;gap:10px}
 .logo-mark{width:32px;height:32px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center}
 .logo-name{font-size:15px;font-weight:600}
 .logo-sub{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:1px}
-.topbar-right{display:flex;align-items:center;gap:10px}
+.topbar-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .month-btn{background:none;border:1px solid var(--border2);color:var(--text2);font-size:13px;padding:6px 10px;border-radius:var(--radius);cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
 .month-btn:hover{background:var(--bg3);border-color:var(--blue-mid);color:var(--blue)}
 .month-display{font-size:14px;font-weight:500;min-width:110px;text-align:center;font-family:'JetBrains Mono',monospace}
-.saved-badge{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--green);background:var(--green-light);border:1px solid rgba(5,150,105,.2);padding:4px 10px;border-radius:20px;opacity:0;transition:opacity .4s}
+.sync-status{font-size:11px;font-family:'JetBrains Mono',monospace;padding:4px 10px;border-radius:20px;border:1px solid;display:flex;align-items:center;gap:5px;transition:all .3s}
+.sync-ok{color:var(--green);background:var(--green-light);border-color:rgba(5,150,105,.2)}
+.sync-saving{color:var(--amber);background:var(--amber-light);border-color:rgba(217,119,6,.2)}
+.sync-err{color:var(--red);background:var(--red-light);border-color:rgba(220,38,38,.2)}
+.sync-off{color:var(--text3);background:var(--bg3);border-color:var(--border)}
+.btn-google{display:flex;align-items:center;gap:7px;background:var(--blue);color:#fff;font-size:12px;font-weight:500;font-family:'Inter',sans-serif;padding:8px 14px;border-radius:var(--radius);border:none;cursor:pointer;transition:background .15s}
+.btn-google:hover{background:var(--blue2)}
 .container{max-width:1100px;margin:0 auto;padding:24px 32px}
 .summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
 .scard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;box-shadow:var(--shadow)}
 .scard.hi{background:var(--blue);border-color:var(--blue2)}
-.scard.hi .sc-label{color:rgba(255,255,255,.65)}
+.scard.hi .sc-label,.scard.hi .sc-sub{color:rgba(255,255,255,.6)}
 .scard.hi .sc-val{color:#fff}
-.scard.hi .sc-sub{color:rgba(255,255,255,.5)}
 .scard.hi .abar{background:rgba(255,255,255,.4)}
 .abar{width:20px;height:3px;border-radius:2px;background:var(--blue);margin-bottom:10px}
 .sc-label{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
 .sc-val{font-size:20px;font-weight:600}
 .sc-sub{font-size:11px;color:var(--text3);margin-top:4px}
 .panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px}
-.ph{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--border);background:var(--bg3)}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--border);background:var(--bg3);flex-wrap:wrap;gap:8px}
 .pt{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;font-family:'JetBrains Mono',monospace}
 .pbadge{font-size:11px;font-family:'JetBrains Mono',monospace;padding:3px 8px;border-radius:20px;font-weight:500}
 .bg{background:var(--green-light);color:var(--green)}
@@ -60,15 +65,11 @@ td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;color:
 tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--bg3)}
 .tn{color:var(--text);font-weight:500}
-.tm{font-family:'JetBrains Mono',monospace;font-size:12px}
 .tv{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--text)}
 .sbtn{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap}
-.sp{background:var(--green-light);color:var(--green)}
-.sp:hover{background:#a7f3d0}
-.se{background:var(--amber-light);color:var(--amber)}
-.se:hover{background:#fde68a}
-.sa{background:var(--red-light);color:var(--red)}
-.sa:hover{background:#fecaca}
+.sp{background:var(--green-light);color:var(--green)}.sp:hover{background:#a7f3d0}
+.se{background:var(--amber-light);color:var(--amber)}.se:hover{background:#fde68a}
+.sa{background:var(--red-light);color:var(--red)}.sa:hover{background:#fecaca}
 .vbadge{font-size:11px;font-family:'JetBrains Mono',monospace;padding:3px 7px;border-radius:6px;background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
 .vh{background:var(--amber-light);color:var(--amber);border-color:rgba(217,119,6,.2)}
 .vat{background:var(--red-light);color:var(--red);border-color:rgba(220,38,38,.2)}
@@ -111,11 +112,20 @@ select option{background:var(--bg2)}
 .bicon.del:hover{color:var(--red);background:var(--red-light)}
 .dsec{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;font-family:'JetBrains Mono',monospace;margin:24px 0 12px;display:flex;align-items:center;gap:10px}
 .dsec::after{content:'';flex:1;height:1px;background:var(--border)}
-@media(max-width:900px){.summary-grid{grid-template-columns:repeat(3,1fr)}.two-col{grid-template-columns:1fr}.container{padding:16px}.topbar{padding:14px 16px;flex-wrap:wrap;gap:10px}}
+.loading-overlay{position:fixed;inset:0;background:rgba(240,244,250,.9);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.spinner{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:13px;color:var(--text2);font-family:'JetBrains Mono',monospace}
+@media(max-width:900px){.summary-grid{grid-template-columns:repeat(3,1fr)}.two-col{grid-template-columns:1fr}.container{padding:16px}.topbar{padding:14px 16px}}
 @media(max-width:560px){.summary-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
+
+<div id="loading-overlay" class="loading-overlay">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loading-text">Conectando ao Google...</div>
+</div>
 
 <div class="topbar">
   <div class="logo">
@@ -128,10 +138,18 @@ select option{background:var(--bg2)}
     </div>
   </div>
   <div class="topbar-right">
-    <span class="saved-badge" id="saved-badge">salvo</span>
+    <div class="sync-status sync-off" id="sync-status">
+      <span id="sync-dot">●</span>
+      <span id="sync-text">desconectado</span>
+    </div>
     <button class="month-btn" onclick="changeMonth(-1)">&#8249;</button>
     <div class="month-display" id="month-display"></div>
     <button class="month-btn" onclick="changeMonth(1)">&#8250;</button>
+    <button class="btn-google" onclick="signIn()" id="btn-signin" style="display:none">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#fff"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#fff" opacity=".8"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#fff" opacity=".6"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#fff" opacity=".4"/></svg>
+      Entrar com Google
+    </button>
+    <button class="btn-google" onclick="signOut()" id="btn-signout" style="display:none;background:var(--text3)">Sair</button>
   </div>
 </div>
 
@@ -142,7 +160,7 @@ select option{background:var(--bg2)}
   <div class="panel">
     <div class="ph">
       <span class="pt">Clientes</span>
-      <div style="display:flex;gap:8px;align-items:center">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
         <span id="badge-pg" class="pbadge bg"></span>
         <span id="badge-pd" class="pbadge ba"></span>
         <button class="badd" onclick="openModal('cliente')">
@@ -200,7 +218,6 @@ select option{background:var(--bg2)}
   </div>
 </div>
 
-<!-- Modal unificado -->
 <div class="modal-overlay" id="modal" onclick="handleOverlay(event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-title" id="modal-title">Novo item</div>
@@ -213,12 +230,19 @@ select option{background:var(--bg2)}
 </div>
 
 <script>
-const STORE = 'duos-fin-v2';
-const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-const today = new Date();
+const CLIENT_ID = '448542738185-sp0j7pq1jm7kh9p92bs8nq7pcv618dnk.apps.googleusercontent.com';
+const SHEET_ID  = '1jysiJmIZBmeh_8eefCYmOAywJy9rQMTb8h2uuufgNRY';
+const SCOPES    = 'https://www.googleapis.com/auth/spreadsheets';
+const MONTHS    = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const today     = new Date();
+
 let currentMonth = today.getMonth();
-let currentYear = today.getFullYear();
-let modalType = null, editId = null, nextId = 200;
+let currentYear  = today.getFullYear();
+let modalType = null, editId = null, nextId = 1;
+let tokenClient, accessToken = null, isSignedIn = false;
+let saveTimer = null;
+
+let clientes = [], equipe = [], fixos = [];
 
 const DEFAULT_CLIENTES = [
   {id:1, name:'Bureau Contabilidade',   value:4300, venc:null, type:'full',    status:{}},
@@ -242,65 +266,168 @@ const DEFAULT_EQUIPE = [
   {id:103, name:'Marcus — videomaker',       value:null, dia:27},
 ];
 const DEFAULT_FIXOS = [
-  {id:201, name:'Freepik',     value:80,  dia:null},
-  {id:202, name:'Design BR',   value:30,  dia:null},
-  {id:203, name:'Google One',  value:60,  dia:null},
-  {id:204, name:'Internet',    value:150, dia:null},
-  {id:205, name:'Energia',     value:200, dia:null},
+  {id:201, name:'Freepik',    value:80,  dia:null},
+  {id:202, name:'Design BR',  value:30,  dia:null},
+  {id:203, name:'Google One', value:60,  dia:null},
+  {id:204, name:'Internet',   value:150, dia:null},
+  {id:205, name:'Energia',    value:200, dia:null},
 ];
 
-let clientes = [], equipe = [], fixos = [];
+function setSyncStatus(state, text){
+  const el = document.getElementById('sync-status');
+  el.className = 'sync-status sync-' + state;
+  document.getElementById('sync-text').textContent = text;
+}
 
-function load(){
+function setLoading(show, text='Carregando...'){
+  const ov = document.getElementById('loading-overlay');
+  ov.style.display = show ? 'flex' : 'none';
+  if(text) document.getElementById('loading-text').textContent = text;
+}
+
+window.onGoogleLibraryLoad = function(){
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: CLIENT_ID,
+    scope: SCOPES,
+    callback: async (resp) => {
+      if(resp.error){ setSyncStatus('err','erro ao conectar'); setLoading(false); return; }
+      accessToken = resp.access_token;
+      isSignedIn  = true;
+      document.getElementById('btn-signin').style.display   = 'none';
+      document.getElementById('btn-signout').style.display  = 'flex';
+      setSyncStatus('saving','conectando...');
+      await initSheet();
+      await loadFromSheet();
+      setLoading(false);
+      setSyncStatus('ok','sincronizado');
+    }
+  });
+  setLoading(false);
+  document.getElementById('btn-signin').style.display = 'flex';
+  setSyncStatus('off','desconectado');
+  loadLocal();
+};
+
+function signIn(){
+  setLoading(true,'Autenticando...');
+  tokenClient.requestAccessToken({prompt:'consent'});
+}
+
+function signOut(){
+  google.accounts.oauth2.revoke(accessToken, ()=>{});
+  accessToken = null; isSignedIn = false;
+  document.getElementById('btn-signin').style.display  = 'flex';
+  document.getElementById('btn-signout').style.display = 'none';
+  setSyncStatus('off','desconectado');
+}
+
+async function sheetsRequest(method, range, body=null){
+  const base = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}`;
+  let url, opts = { method, headers:{ Authorization:'Bearer '+accessToken, 'Content-Type':'application/json' } };
+  if(method==='GET'){
+    url = `${base}/values/${encodeURIComponent(range)}`;
+  } else if(method==='PUT'){
+    url = `${base}/values/${encodeURIComponent(range)}?valueInputOption=RAW`;
+    opts.body = JSON.stringify(body);
+  } else if(method==='POST' && range==='batchUpdate'){
+    url = `${base}:batchUpdate`;
+    opts.body = JSON.stringify(body);
+  }
+  const r = await fetch(url, opts);
+  if(!r.ok){ const t=await r.text(); throw new Error(t); }
+  return r.json();
+}
+
+async function initSheet(){
   try{
-    const r = localStorage.getItem(STORE);
-    if(r){ const d=JSON.parse(r); clientes=d.clientes||DEFAULT_CLIENTES; equipe=d.equipe||DEFAULT_EQUIPE; fixos=d.fixos||DEFAULT_FIXOS; nextId=d.nextId||200; }
+    const r = await sheetsRequest('GET','Dados!A1');
+    if(!r.values){ await sheetsRequest('PUT','Dados!A1',{values:[['DUOS_DASHBOARD_V1']]}); }
+  }catch(e){ console.warn('initSheet',e); }
+}
+
+async function loadFromSheet(){
+  try{
+    setSyncStatus('saving','carregando...');
+    const r = await sheetsRequest('GET','Dados!A1:A1');
+    const r2 = await sheetsRequest('GET','Dados!B1:B1');
+    if(!r2.values || !r2.values[0]){ await saveToSheet(); return; }
+    const json = JSON.parse(r2.values[0][0]);
+    clientes = json.clientes || DEFAULT_CLIENTES;
+    equipe   = json.equipe   || DEFAULT_EQUIPE;
+    fixos    = json.fixos    || DEFAULT_FIXOS;
+    nextId   = json.nextId   || 300;
+    render();
+    setSyncStatus('ok','sincronizado');
+  }catch(e){ console.warn('loadFromSheet',e); setSyncStatus('err','erro ao carregar'); }
+}
+
+async function saveToSheet(){
+  if(!isSignedIn) return;
+  setSyncStatus('saving','salvando...');
+  try{
+    const payload = JSON.stringify({clientes,equipe,fixos,nextId});
+    await sheetsRequest('PUT','Dados!A1:B1',{values:[['DUOS_DASHBOARD_V1', payload]]});
+    setSyncStatus('ok','sincronizado');
+  }catch(e){ console.warn('saveToSheet',e); setSyncStatus('err','erro ao salvar'); }
+}
+
+function scheduleSave(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{ saveToSheet(); saveLocal(); }, 800);
+}
+
+function saveLocal(){
+  try{ localStorage.setItem('duos-fin-v2', JSON.stringify({clientes,equipe,fixos,nextId})); }catch(e){}
+}
+
+function loadLocal(){
+  try{
+    const r = localStorage.getItem('duos-fin-v2');
+    if(r){ const d=JSON.parse(r); clientes=d.clientes||DEFAULT_CLIENTES; equipe=d.equipe||DEFAULT_EQUIPE; fixos=d.fixos||DEFAULT_FIXOS; nextId=d.nextId||300; }
     else{ clientes=DEFAULT_CLIENTES; equipe=DEFAULT_EQUIPE; fixos=DEFAULT_FIXOS; }
   }catch(e){ clientes=DEFAULT_CLIENTES; equipe=DEFAULT_EQUIPE; fixos=DEFAULT_FIXOS; }
   render();
 }
 
-function persist(){
-  localStorage.setItem(STORE, JSON.stringify({clientes,equipe,fixos,nextId}));
-  const b=document.getElementById('saved-badge');
-  b.style.opacity='1'; setTimeout(()=>b.style.opacity='0',2000);
-}
-
-const brl = v => v!=null && v!=='' ? 'R$ '+parseFloat(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
+const brl = v => v!=null&&v!==''&&!isNaN(parseFloat(v)) ? 'R$ '+parseFloat(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
 const monthKey = () => `${currentYear}-${String(currentMonth+1).padStart(2,'0')}`;
 const typeMap = {gestao:'Gestão',trafego:'Tráfego',full:'Full service',avulso:'Avulso'};
 
-function getStatus(c){ return (c.status && c.status[monthKey()]) || 'pendente'; }
+function getStatus(c){ return (c.status&&c.status[monthKey()])||'pendente'; }
 function cycleStatus(id){
   const c=clientes.find(x=>x.id===id); if(!c) return;
   if(!c.status) c.status={};
   const cur=getStatus(c);
   c.status[monthKey()] = cur==='pendente'?'pago':cur==='pago'?'atrasado':'pendente';
-  persist(); render();
+  scheduleSave(); render();
 }
 
 function vencClass(dia){
   if(!dia) return '';
-  const v=new Date(currentYear,currentMonth,dia);
   if(dia===today.getDate()&&currentMonth===today.getMonth()&&currentYear===today.getFullYear()) return 'vh';
+  const v=new Date(currentYear,currentMonth,dia);
   if(v<today&&currentMonth===today.getMonth()&&currentYear===today.getFullYear()) return 'vat';
   return '';
 }
 
-const stMap={pago:{cls:'sp',icon:'✓',label:'Pago'},pendente:{cls:'se',icon:'○',label:'Pendente'},atrasado:{cls:'sa',icon:'!',label:'Atrasado'}};
+const stMap={
+  pago:    {cls:'sp',icon:'✓',label:'Pago'},
+  pendente:{cls:'se',icon:'○',label:'Pendente'},
+  atrasado:{cls:'sa',icon:'!',label:'Atrasado'}
+};
 
 function render(){
-  document.getElementById('month-display').textContent=MONTHS[currentMonth]+' '+currentYear;
-  const mk=monthKey();
-  const totalR=clientes.reduce((s,c)=>s+(c.value||0),0);
-  const recebido=clientes.filter(c=>getStatus(c)==='pago').reduce((s,c)=>s+(c.value||0),0);
-  const pendente=totalR-recebido;
-  const totalEq=equipe.reduce((s,e)=>s+(e.value||0),0);
-  const totalFx=fixos.reduce((s,e)=>s+(e.value||0),0);
-  const totalG=totalEq+totalFx;
-  const lucro=totalR-totalG;
+  document.getElementById('month-display').textContent = MONTHS[currentMonth]+' '+currentYear;
+
+  const totalR  = clientes.reduce((s,c)=>s+(c.value||0),0);
+  const recebido= clientes.filter(c=>getStatus(c)==='pago').reduce((s,c)=>s+(c.value||0),0);
+  const pendente= totalR-recebido;
+  const totalEq = equipe.reduce((s,e)=>s+(e.value||0),0);
+  const totalFx = fixos.reduce((s,e)=>s+(e.value||0),0);
+  const totalG  = totalEq+totalFx;
+  const lucro   = totalR-totalG;
   const lucroEach=lucro/2;
-  const margem=totalR>0?((lucro/totalR)*100).toFixed(1):0;
+  const margem  = totalR>0?((lucro/totalR)*100).toFixed(1):0;
 
   document.getElementById('summary-grid').innerHTML=`
     <div class="scard hi"><div class="abar"></div><div class="sc-label">Receita total</div><div class="sc-val">${brl(totalR)}</div><div class="sc-sub">${clientes.length} clientes</div></div>
@@ -335,7 +462,7 @@ function render(){
   document.getElementById('badge-equipe').textContent=brl(totalEq);
   document.getElementById('list-equipe').innerHTML=equipe.map(e=>`
     <div class="erow">
-      <div><div class="en">${e.name}</div><div class="ed">${e.dia?'vence dia '+e.dia:'sem data fixa'}</div></div>
+      <div><div class="en">${e.name}</div><div class="ed">${e.dia?'pagamento dia '+e.dia:'sem data fixa'}</div></div>
       <div class="eactions">
         <div class="ev">${e.value?brl(e.value):`<span style="color:var(--text3);font-size:12px">a definir</span>`}</div>
         <button class="bicon" onclick="openModal('equipe',${e.id})" title="Editar">✎</button>
@@ -383,20 +510,18 @@ function changeMonth(dir){
   render();
 }
 
-function openModal(type, id=null){
+function openModal(type,id=null){
   modalType=type; editId=id;
-  const modal=document.getElementById('modal');
   const title=document.getElementById('modal-title');
   const body=document.getElementById('modal-body');
-
   if(type==='cliente'){
     const c=id?clientes.find(x=>x.id===id):null;
     title.textContent=c?'Editar cliente':'Novo cliente';
     body.innerHTML=`
-      <div class="fg"><label class="fl">Nome do cliente</label><input type="text" id="f-name" placeholder="Ex: Studio XYZ" value="${c?c.name:''}"></div>
+      <div class="fg"><label class="fl">Nome do cliente</label><input type="text" id="f-name" value="${c?c.name:''}" placeholder="Ex: Studio XYZ"></div>
       <div class="frow">
-        <div class="fg"><label class="fl">Valor mensal (R$)</label><input type="number" id="f-value" placeholder="2000" min="0" value="${c&&c.value?c.value:''}"></div>
-        <div class="fg"><label class="fl">Dia de vencimento</label><input type="number" id="f-venc" placeholder="10" min="1" max="31" value="${c&&c.venc?c.venc:''}"></div>
+        <div class="fg"><label class="fl">Valor mensal (R$)</label><input type="number" id="f-value" min="0" value="${c&&c.value?c.value:''}" placeholder="2000"></div>
+        <div class="fg"><label class="fl">Dia de vencimento</label><input type="number" id="f-venc" min="1" max="31" value="${c&&c.venc?c.venc:''}" placeholder="10"></div>
       </div>
       <div class="fg"><label class="fl">Tipo de serviço</label>
         <select id="f-type">
@@ -404,26 +529,24 @@ function openModal(type, id=null){
           <option value="trafego" ${c&&c.type==='trafego'?'selected':''}>Tráfego</option>
           <option value="full" ${c&&c.type==='full'?'selected':''}>Full service</option>
           <option value="avulso" ${c&&c.type==='avulso'?'selected':''}>Avulso</option>
-        </select>
-      </div>`;
+        </select></div>`;
   } else if(type==='equipe'){
     const e=id?equipe.find(x=>x.id===id):null;
-    title.textContent=e?'Editar membro da equipe':'Novo membro';
+    title.textContent=e?'Editar membro':'Novo membro da equipe';
     body.innerHTML=`
-      <div class="fg"><label class="fl">Nome e função</label><input type="text" id="f-name" placeholder="Ex: João — designer" value="${e?e.name:''}"></div>
+      <div class="fg"><label class="fl">Nome e função</label><input type="text" id="f-name" value="${e?e.name:''}" placeholder="Ex: João — designer"></div>
       <div class="frow">
-        <div class="fg"><label class="fl">Valor mensal (R$)</label><input type="number" id="f-value" placeholder="1500" min="0" value="${e&&e.value?e.value:''}"></div>
-        <div class="fg"><label class="fl">Dia de pagamento</label><input type="number" id="f-dia" placeholder="10" min="1" max="31" value="${e&&e.dia?e.dia:''}"></div>
+        <div class="fg"><label class="fl">Valor mensal (R$)</label><input type="number" id="f-value" min="0" value="${e&&e.value?e.value:''}" placeholder="1500"></div>
+        <div class="fg"><label class="fl">Dia de pagamento</label><input type="number" id="f-dia" min="1" max="31" value="${e&&e.dia?e.dia:''}" placeholder="10"></div>
       </div>`;
   } else if(type==='fixo'){
     const e=id?fixos.find(x=>x.id===id):null;
     title.textContent=e?'Editar gasto fixo':'Novo gasto fixo';
     body.innerHTML=`
-      <div class="fg"><label class="fl">Descrição</label><input type="text" id="f-name" placeholder="Ex: Adobe Creative" value="${e?e.name:''}"></div>
-      <div class="fg"><label class="fl">Valor mensal (R$)</label><input type="number" id="f-value" placeholder="100" min="0" value="${e&&e.value?e.value:''}"></div>`;
+      <div class="fg"><label class="fl">Descrição</label><input type="text" id="f-name" value="${e?e.name:''}" placeholder="Ex: Adobe Creative"></div>
+      <div class="fg"><label class="fl">Valor mensal (R$)</label><input type="number" id="f-value" min="0" value="${e&&e.value?e.value:''}" placeholder="100"></div>`;
   }
-
-  modal.classList.add('open');
+  document.getElementById('modal').classList.add('open');
   setTimeout(()=>{ const el=document.getElementById('f-name'); if(el) el.focus(); },50);
 }
 
@@ -431,7 +554,6 @@ function saveModal(){
   const name=(document.getElementById('f-name')?.value||'').trim();
   const value=parseFloat(document.getElementById('f-value')?.value)||null;
   if(!name){ alert('Informe o nome/descrição.'); return; }
-
   if(modalType==='cliente'){
     const venc=parseInt(document.getElementById('f-venc')?.value)||null;
     const type=document.getElementById('f-type')?.value||'gestao';
@@ -445,11 +567,10 @@ function saveModal(){
     if(editId){ const i=fixos.findIndex(x=>x.id===editId); if(i>-1) fixos[i]={...fixos[i],name,value}; }
     else fixos.push({id:nextId++,name,value});
   }
-
-  persist(); closeModal(); render();
+  scheduleSave(); closeModal(); render();
 }
 
-function delItem(list, id){
+function delItem(list,id){
   const map={clientes,equipe,fixos};
   const arr=map[list]; if(!arr) return;
   const item=arr.find(x=>x.id===id);
@@ -457,13 +578,13 @@ function delItem(list, id){
   if(list==='clientes') clientes=clientes.filter(x=>x.id!==id);
   else if(list==='equipe') equipe=equipe.filter(x=>x.id!==id);
   else fixos=fixos.filter(x=>x.id!==id);
-  persist(); render();
+  scheduleSave(); render();
 }
 
 function closeModal(){ document.getElementById('modal').classList.remove('open'); modalType=null; editId=null; }
 function handleOverlay(e){ if(e.target===document.getElementById('modal')) closeModal(); }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
-load();
 </script>
+<script src="https://accounts.google.com/gsi/client" async defer onload="window.onGoogleLibraryLoad && window.onGoogleLibraryLoad()"></script>
 </body>
 </html>
