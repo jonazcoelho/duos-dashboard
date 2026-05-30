@@ -460,6 +460,10 @@ async function saveToSheet(){
     await sheetsRequest('PUT','Dados!A1:B1',{values:[['DUOS_V1',JSON.stringify({clientes,equipe,fixos,nextId})]]});
     setSyncStatus('ok','sincronizado');
   }catch(e){
+    isSignedIn = false;
+    accessToken = null;
+    document.getElementById('btn-signin').style.display  = 'flex';
+    document.getElementById('btn-signout').style.display = 'none';
     setSyncStatus('err','sessão expirada — clique em Sincronizar');
   }
 }
