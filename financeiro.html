@@ -376,38 +376,19 @@ function loadGoogleScript(){
   document.head.appendChild(s);
 }
 
-let tokenCallback = null;
-let refreshInterval = null;
-
 function initGoogleAuth(){
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: CLIENT_ID,
     scope: SCOPES,
     callback: async (resp) => {
-      if(resp.error){
-        setSyncStatus('err','erro ao conectar');
-        if(tokenCallback) tokenCallback.reject(resp);
-        tokenCallback = null;
-        return;
-      }
+      if(resp.error){ setSyncStatus('err','erro ao conectar'); return; }
       accessToken = resp.access_token;
       isSignedIn  = true;
-      if(tokenCallback){
-        tokenCallback.resolve();
-        tokenCallback = null;
-        return;
-      }
-      // primeiro login
       document.getElementById('btn-signin').style.display  = 'none';
       document.getElementById('btn-signout').style.display = 'flex';
       setSyncStatus('saving','carregando...');
       await initSheet();
       await loadFromSheet();
-      // renovação automática a cada 45 min
-      if(refreshInterval) clearInterval(refreshInterval);
-      refreshInterval = setInterval(()=>{
-        if(isSignedIn) tokenClient.requestAccessToken({prompt:''});
-      }, 45 * 60 * 1000);
     }
   });
   document.getElementById('btn-signin').style.display = 'flex';
@@ -420,18 +401,11 @@ function setSyncStatus(state, text){
   document.getElementById('sync-text').textContent = text;
 }
 
-function signIn(){ tokenClient.requestAccessToken({prompt:'consent'}); }
+function signIn(){ tokenClient.requestAccessToken({prompt:'select_account'}); }
 
-function refreshToken(){
-  return new Promise((resolve, reject)=>{
-    tokenCallback = {resolve, reject};
-    tokenClient.requestAccessToken({prompt:''});
-  });
-}
 function signOut(){
-  if(refreshInterval) clearInterval(refreshInterval);
   if(accessToken) google.accounts.oauth2.revoke(accessToken,()=>{});
-  accessToken=null; isSignedIn=false; tokenCallback=null;
+  accessToken=null; isSignedIn=false;
   document.getElementById('btn-signin').style.display  = 'flex';
   document.getElementById('btn-signout').style.display = 'none';
   setSyncStatus('off','desconectado');
@@ -462,13 +436,7 @@ async function loadFromSheet(){
     nextId=json.nextId||300;
     render();
     setSyncStatus('ok','sincronizado');
-  }catch(e){
-    const msg=e.message||'';
-    if(msg.includes('401')||msg.includes('403')){
-      try{ await refreshToken(); await loadFromSheet(); }
-      catch(e2){ setSyncStatus('err','erro ao carregar'); }
-    } else { setSyncStatus('err','erro ao carregar'); }
-  }
+  }catch(e){ setSyncStatus('err','erro ao carregar'); }
 }
 
 async function saveToSheet(){
@@ -478,17 +446,7 @@ async function saveToSheet(){
     await sheetsRequest('PUT','Dados!A1:B1',{values:[['DUOS_V1',JSON.stringify({clientes,equipe,fixos,nextId})]]});
     setSyncStatus('ok','sincronizado');
   }catch(e){
-    const msg = e.message||'';
-    if(msg.includes('401')||msg.includes('403')){
-      setSyncStatus('saving','renovando token...');
-      try{
-        await refreshToken();
-        await sheetsRequest('PUT','Dados!A1:B1',{values:[['DUOS_V1',JSON.stringify({clientes,equipe,fixos,nextId})]]});
-        setSyncStatus('ok','sincronizado');
-      }catch(e2){ setSyncStatus('err','erro ao salvar — reconecte'); }
-    } else {
-      setSyncStatus('err','erro ao salvar');
-    }
+    setSyncStatus('err','sessão expirada — clique em Sincronizar');
   }
 }
 
