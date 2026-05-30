@@ -436,13 +436,15 @@ async function initSheet(){
 async function loadFromSheet(){
   try{
     const r = await sheetsRequest('GET','Dados!B1:B1');
+    console.log('loadFromSheet response:', JSON.stringify(r));
     if(!r.values||!r.values[0]){
-      // planilha vazia, só salva sem recarregar
+      console.log('Planilha vazia, salvando dados padrão...');
       setSyncStatus('saving','salvando pela primeira vez...');
       await sheetsRequest('PUT','Dados!A1:B1',{values:[['DUOS_V1',JSON.stringify({clientes,equipe,fixos,nextId})]]});
       setSyncStatus('ok','sincronizado');
       return;
     }
+    console.log('Dados encontrados, parseando...');
     const json=JSON.parse(r.values[0][0]);
     clientes=json.clientes||DEFAULT_CLIENTES;
     equipe=json.equipe||DEFAULT_EQUIPE;
@@ -450,7 +452,10 @@ async function loadFromSheet(){
     nextId=json.nextId||300;
     render();
     setSyncStatus('ok','sincronizado');
-  }catch(e){ setSyncStatus('err','erro ao carregar'); }
+  }catch(e){
+    console.error('loadFromSheet error:', e.message, e);
+    setSyncStatus('err','erro ao carregar');
+  }
 }
 
 async function saveToSheet(){
