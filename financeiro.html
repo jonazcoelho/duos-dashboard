@@ -430,7 +430,20 @@ async function sheetsRequest(method,range,body=null){
 }
 
 async function initSheet(){
-  try{ await sheetsRequest('GET','Dados!A1'); }catch(e){}
+  try{
+    // tenta ler a aba Dados
+    await sheetsRequest('GET','Dados!A1');
+  }catch(e){
+    // aba não existe, cria via batchUpdate
+    try{
+      const base=`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}:batchUpdate`;
+      await fetch(base,{
+        method:'POST',
+        headers:{Authorization:'Bearer '+accessToken,'Content-Type':'application/json'},
+        body:JSON.stringify({requests:[{addSheet:{properties:{title:'Dados'}}}]})
+      });
+    }catch(e2){ console.warn('Erro ao criar aba:', e2); }
+  }
 }
 
 async function loadFromSheet(){
