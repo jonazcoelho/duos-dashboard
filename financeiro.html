@@ -403,6 +403,18 @@ function setSyncStatus(state, text){
 }
 
 function signIn(){ tokenClient.requestAccessToken({prompt:''}); }
+
+function refreshToken(){
+  return new Promise((resolve, reject)=>{
+    tokenClient.callback = (resp)=>{
+      if(resp.error){ reject(resp); return; }
+      accessToken = resp.access_token;
+      isSignedIn  = true;
+      resolve();
+    };
+    tokenClient.requestAccessToken({prompt:''});
+  });
+}
 function signOut(){
   if(accessToken) google.accounts.oauth2.revoke(accessToken,()=>{});
   accessToken=null; isSignedIn=false;
@@ -435,16 +447,35 @@ async function loadFromSheet(){
     fixos=json.fixos||DEFAULT_FIXOS;
     nextId=json.nextId||300;
     render();
-  }catch(e){ setSyncStatus('err','erro ao carregar'); }
+    setSyncStatus('ok','sincronizado');
+  }catch(e){
+    const msg=e.message||'';
+    if(msg.includes('401')||msg.includes('403')){
+      try{ await refreshToken(); await loadFromSheet(); }
+      catch(e2){ setSyncStatus('err','erro ao carregar'); }
+    } else { setSyncStatus('err','erro ao carregar'); }
+  }
 }
 
 async function saveToSheet(){
-  if(!isSignedIn) return;
+  if(!isSignedIn){ setSyncStatus('off','desconectado'); return; }
   setSyncStatus('saving','salvando...');
   try{
     await sheetsRequest('PUT','Dados!A1:B1',{values:[['DUOS_V1',JSON.stringify({clientes,equipe,fixos,nextId})]]});
     setSyncStatus('ok','sincronizado');
-  }catch(e){ setSyncStatus('err','erro ao salvar'); }
+  }catch(e){
+    const msg = e.message||'';
+    if(msg.includes('401')||msg.includes('403')){
+      setSyncStatus('saving','renovando token...');
+      try{
+        await refreshToken();
+        await sheetsRequest('PUT','Dados!A1:B1',{values:[['DUOS_V1',JSON.stringify({clientes,equipe,fixos,nextId})]]});
+        setSyncStatus('ok','sincronizado');
+      }catch(e2){ setSyncStatus('err','erro ao salvar — reconecte'); }
+    } else {
+      setSyncStatus('err','erro ao salvar');
+    }
+  }
 }
 
 function scheduleSave(){
