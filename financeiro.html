@@ -376,12 +376,16 @@ function loadGoogleScript(){
   document.head.appendChild(s);
 }
 
+let authInProgress = false;
+
 function initGoogleAuth(){
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: CLIENT_ID,
     scope: SCOPES,
     callback: async (resp) => {
-      if(resp.error){ setSyncStatus('err','erro ao conectar'); return; }
+      if(authInProgress) return;
+      authInProgress = true;
+      if(resp.error){ setSyncStatus('err','erro ao conectar'); authInProgress=false; return; }
       accessToken = resp.access_token;
       isSignedIn  = true;
       document.getElementById('btn-signin').style.display  = 'none';
@@ -389,6 +393,7 @@ function initGoogleAuth(){
       setSyncStatus('saving','carregando...');
       await initSheet();
       await loadFromSheet();
+      authInProgress = false;
     }
   });
   document.getElementById('btn-signin').style.display = 'flex';
@@ -401,11 +406,14 @@ function setSyncStatus(state, text){
   document.getElementById('sync-text').textContent = text;
 }
 
-function signIn(){ tokenClient.requestAccessToken({prompt:'select_account'}); }
+function signIn(){
+  authInProgress = false;
+  tokenClient.requestAccessToken({prompt:''});
+}
 
 function signOut(){
   if(accessToken) google.accounts.oauth2.revoke(accessToken,()=>{});
-  accessToken=null; isSignedIn=false;
+  accessToken=null; isSignedIn=false; authInProgress=false;
   document.getElementById('btn-signin').style.display  = 'flex';
   document.getElementById('btn-signout').style.display = 'none';
   setSyncStatus('off','desconectado');
@@ -428,7 +436,13 @@ async function initSheet(){
 async function loadFromSheet(){
   try{
     const r = await sheetsRequest('GET','Dados!B1:B1');
-    if(!r.values||!r.values[0]){ await saveToSheet(); return; }
+    if(!r.values||!r.values[0]){
+      // planilha vazia, só salva sem recarregar
+      setSyncStatus('saving','salvando pela primeira vez...');
+      await sheetsRequest('PUT','Dados!A1:B1',{values:[['DUOS_V1',JSON.stringify({clientes,equipe,fixos,nextId})]]});
+      setSyncStatus('ok','sincronizado');
+      return;
+    }
     const json=JSON.parse(r.values[0][0]);
     clientes=json.clientes||DEFAULT_CLIENTES;
     equipe=json.equipe||DEFAULT_EQUIPE;
